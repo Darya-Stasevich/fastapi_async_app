@@ -1,0 +1,44 @@
+version: '3.8'
+
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3000:8000"
+    volumes:
+      - .:/app/
+    env_file:
+      - ./.env
+    environment:
+      - POSTGRES_HOST=db
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+    depends_on:
+      - db
+    restart: always
+    networks:
+      - webapp_postgres
+
+  db:
+    image: "postgres"
+    environment:
+      - POSTGRES_HOST=db
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+    env_file:
+      - ./.env
+    restart: always
+    networks:
+      - webapp_postgres
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+networks:
+  webapp_postgres:
+
+volumes:
+  pgdata:
