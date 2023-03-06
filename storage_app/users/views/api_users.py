@@ -35,7 +35,7 @@ async def show_users(db: AsyncSession = Depends(get_db)):
     return await APIUserController.get_users(db=db)
 
 
-@router.patch("/{user_id}", response_model=UserOut)
+@router.patch("/{user_id}", status_code=202, response_model=UserOut)
 async def update_user(user: UserPatch, user_id: int, db: AsyncSession = Depends(get_db),
                       user_token: UserOut = Depends(get_current_user)):
     return await APIUserController.update_user(user=user, user_id=user_id, db=db)

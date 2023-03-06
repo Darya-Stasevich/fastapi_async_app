@@ -7,7 +7,6 @@ from storage_app.articles.controllers.api_article_controller import APIArticleCo
 from storage_app.articles.models.api_article_models import ArticleCreate, ArticleOut, ArticlePatch
 from storage_app.authentication.views.authentication_views import get_current_user
 from storage_app.db_config import get_db
-from storage_app.users.models.api_users import UserOut
 
 router = APIRouter(
     prefix='/articles',
@@ -32,7 +31,7 @@ async def show_articles(db: AsyncSession = Depends(get_db), user_id: int= Depend
     return await APIArticleController.get_articles(db=db)
 
 
-@router.patch("/{article_id}", response_model=ArticleOut)
+@router.patch("/{article_id}", status_code=202, response_model=ArticleOut)
 async def update_article(article: ArticlePatch, article_id: int, db: AsyncSession = Depends(get_db),
                          user_id: int = Depends(get_current_user)):
     return await APIArticleController.update_article(article=article, article_id=article_id, db=db,
